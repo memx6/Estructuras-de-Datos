@@ -6,7 +6,14 @@ maximo x y =
                 then x
                 else y
 
-
+                
+                
+minimo2 :: Int -> Int -> Int
+--Dados dos números devuelve el menor de estos.
+minimo2 x y = 
+                if x < y
+                then x
+                else y
 
 suma2 :: Int -> Int
 suma2 x = x + 2
@@ -301,20 +308,22 @@ reversa (x:xs) = reversa xs ++ [x]
 --Dadas dos listas de enteros, devuelve una lista donde el elemento en la posición
  --n es el máximo entre el elemento n de la primera lista y de la segunda lista, 
  --teniendo en cuenta que las listas no necesariamente tienen la misma longitud.
- --zipMaximos [][] = []
- --zipMaximos (x:xs) (y:ys) = [(maxim x y)] ++ zipMaximos xs ys
+ --zipMaximos [] []          = []
+ --zipMaximos (x:xs) []      = [x] ++ zipMaximos xs []
+ --zipMaximos [] (y:ys)      = [y] ++ zipMaximos [] ys
+ --zipMaximos (x:xs) (y:ys)  = [(maximo x y)] ++ (zipMaximos xs ys)
 
 
 -- 20. 
---zipSort :: [Int] -> [Int] -> [(Int,Int)]
+zipSort :: [Int] -> [Int] -> [(Int,Int)]
 -- Dadas dos listas de enteros de igual longitud, devuelve una lista de pares 
 -- (min, max), donde min y max son el mínimo y el máximo entre los elementos de 
 -- ambas listas en la misma posición.
 
---zipSort [x][y] = [(x,y)]
---zipSort (x:xs)(y:ys) = if length xs == length ys
---                        then ( (minimo (x y)) ,(maxim (x y)) ) : (zipSort xs ys)
- --                       else error "Listas de diferente longitud"
+zipSort [x][y] = [(x,y)]
+zipSort (x:xs)(y:ys) = if length xs == length ys
+                        then ( (minimo2 x y) ,(maxim x y) ) : (zipSort xs ys)
+                        else error "Listas de diferente longitud"
 
 --21. 
 promedio :: [Int] -> Int
@@ -371,15 +380,13 @@ replicarN n x = x : replicarN (n-1) x
 
 
 --5. 
---desdeHasta :: Int -> Int -> [Int]
+desdeHasta :: Int -> Int -> [Int]
 --Dados dos números n y m devuelve una lista cuyos elementos sean los números entre n 
 --y m (incluidos).
---desdeHasta 0 0 = []
---desdeHasta n m = if n /= m
---                then desdeHasta n (m-1) ++ [n]
---                else desdeHasta n m ++ [m]
-
- 
+desdeHasta 0 0 = []
+desdeHasta n m = if n < m
+               then n : desdeHasta (n+1) m 
+               else [m]
 
 -- 6. 
 takeN :: Int -> [a] -> [a]
@@ -409,12 +416,12 @@ splitN n xs = (takeN n xs , dropN n xs)
 --splitMin :: Ord a => [a] => (a,[a])
 --splitMin [] = error "no tiene minimo"
 --splitMin [x] = (x,[])
----splitMin (x:xs) = agregarMin x (splitMin xs)
+--splitMin (x:xs) = agregarMin x (splitMin xs)
 
 --agregarMin x (m, xssm) =
-  --      if x < m 
-   --             then (x, m : xssm)
-   --             else (m, x : xssm)
+ --       if x < m 
+ --               then (x, m : xssm)
+ --               else (m, x : xssm)
 
 
 

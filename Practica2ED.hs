@@ -17,7 +17,7 @@ siguiente Este = Sur
 siguiente Sur = Oeste
 siguiente Oeste = Norte
 
-
+-------------------------------------------
 --2. Definir el tipo de dato Persona, como un nombre la edad de la persona. 
 --Realizar las siguientes funciones:
 data Persona = P String Int deriving Show
@@ -86,7 +86,7 @@ maxP p1 p2 = if edad p1 > edad p2
                     then p1
                     else p2
 
-
+-------------------------------------------
 --3. Definir los tipos de datos Pokemon, como un TipoDePokemon (agua, fuego o planta) y 
 --un porcentaje de energía; y Entrenador, como un nombre y una lista de Pokemon. 
 --Luego definir las siguientes funciones:
@@ -207,7 +207,7 @@ fiestaPokemon :: [Entrenador] -> [Pokemon]
 fiestaPokemon [] = []
 fiestaPokemon (x:xs) = pokemonesDeEntrenador x ++ fiestaPokemon xs
 
-
+-------------------------------------------
 --4. Tenemos los siguientes tipos de datos
 data Pizza = Prepizza
      | Agregar Ingrediente Pizza deriving Show
@@ -409,30 +409,93 @@ lista3 = (Cons 7 lista2)
 
 length1 :: ListaNoVacia a -> Int
 --Retorna la longitud de la lista.
-length1 (Unit a) = 1
+length1 (Unit a)    = 1
 length1 (Cons a xs) = 1 + (length1 xs) 
        
 
 head1 :: ListaNoVacia a -> a
 --Devuelve el primer elemento de la lista. ¿Es una función parcial o total?
-head1 (Unit a) = a
+head1 (Unit a)    = a
 head1 (Cons a xs) = a 
 
 
 tail2 :: ListaNoVacia a -> ListaNoVacia a
 --Devuelve el resto de la lista sacando el primer elemento. Pensar bien qué pasa en caso de que 
 --la lista tenga un sólo elemento. ¿Es una función parcial o total?
-tail2 (Unit a) = Unit a
+tail2 (Unit a)    = Unit a
 tail2 (Cons a xs) = xs 
 
 
 minimo2 :: ListaNoVacia Integer -> Integer -- Me Rompe cuando utilizo Int
 --Dada una lista retorna el mínimo de dicha lista. ¿Es una función parcial o total?
-minimo2 (Unit a) = a
+minimo2 (Unit a)    = a
 minimo2 (Cons a ls) = (min a (minimo2 ls))
 
+-------------------------------------------
+
+--7. Tenemos los siguientes tipos de datos
+data T a = A |B a
+             |C a a
+             | D (T a)
+             | E a (T a) deriving Show
+    
+
+t1 = (E 4 (t2))
+t2 = (D (t4))
+t3 = (E 11 (t4))
+t4 = (A)
+--Responder los siguientes items:
+-- ¿Cuáles son los casos base? ¿Cuáles los recursivos? Dar un ejemplo de un 
+--valor de tipo T Int. ¿Cuántas veces pueden aparecer A, B o C?
+--Definir las siguientes funciones:
+       
+size1 :: T a -> Int
+--Retorna la cantidad de elementos de una estructura T.
+size1 A       = 0
+size1 (B a)   = 1
+size1 (C a b) = 2
+size1 (D t)   = size1 t
+size1 (E a t) = 1 + size1 t
+       
+summ :: T Integer -> Integer
+--Retorna la suma de todos los elementos.
+summ A       = 0
+summ (B a)   = a
+summ (C a b) = a + b
+summ (D t)   = summ t
+summ (E a t) = a + summ t
 
 
+
+hayD :: T a -> Bool
+--Indica si existe al menos una aparición de D en la estructura.
+hayD (D t)   = True
+hayD (E a t) = hayD t
+hayD _       = False
+
+
+cantD :: T a -> Int
+--Retorna la cantidad de D que existen en la estructura.
+cantD (D t) = 1 + (cantD t)
+cantD (E a t ) = cantD t
+cantD _ = 0 
+
+
+recolectarC :: T a -> (a, a)
+--Retorna los valores del constructor C. Notar que ese constructor puede 
+--no darse en la estructura.
+recolectarC (C a b) = (a,b)
+recolectarC (D t) = recolectarC t 
+recolectarC (E a t) = recolectarC t
+recolectarC  _ = error "No hay elementos C"
+
+toList :: T a -> [a]
+--Convierte la estructura a una lista, conservando el orden de los elementos.
+toList A       = []
+toList (B a)   = [a]
+toList (C a b) = [a] ++ [b]
+toList (D t)   = toList t
+toList (E a t) = a : toList t
 
 
 
