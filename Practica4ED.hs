@@ -1,15 +1,17 @@
-module Set (Set a, emptyS, 
+module Practica4ED (
+                Set, emptyS, 
                 addS, 
                 belongs, 
                 sizeS, 
                 removeS, 
                 unionS, 
                 intersectionS, 
-                setToList) where
+                setToList,
+                ) where
 --1. Conjunto
 --Un Set es un tipo abstracto de datos que consta de las siguientes operaciones: 
 
-data Set a = S [a] deriving Show
+data Set a = S [a] deriving (Show ,Eq)
 --Invariantes de Representacion:
 
 emptyS :: Set a
