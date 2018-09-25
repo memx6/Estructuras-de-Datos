@@ -1,12 +1,11 @@
-import Practica4ED
+import Practica4Conjuntos
 
 data Tree a = EmptyT
             | NodeT a (Tree a) (Tree a) deriving Show
 
-
+----- Conjuntos -----------
 --1. Como usuario del tipo abstracto Set implementar las siguientes funciones:
          
-
 losQuePertenecen :: Eq a => [a] -> Set a -> [a]
 --Dados una lista y un conjunto, devuelve una lista con todos los elementos que
 -- pertenecen al conjunto.
@@ -31,3 +30,5 @@ unirTodos :: Eq a => Tree (Set a) -> Set a
 --conjuntos del arbol.
 unirTodos EmptyT            = emptyS
 unirTodos (NodeT s ss1 ss2) = unionS s (unionS(unirTodos ss1) (unirTodos ss2))
+
+

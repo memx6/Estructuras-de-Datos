@@ -1,4 +1,4 @@
-module Practica4ED (
+module Practica4Conjuntos (
                 Set, emptyS, 
                 addS, 
                 belongs, 
