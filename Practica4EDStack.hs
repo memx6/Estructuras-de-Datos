@@ -1,12 +1,20 @@
-module Practica4EDStack (Stack2,
-    emptyS2,
-    isEmptyS2,
-    push2,
-    pop2,
-    top2,
-    lenS2,
-    maxS2
-) where
+module Practica4EDStack (Stack,
+                        emptyS,
+                        isEmptyS,
+                        push,
+                        pop,
+                        top,
+                        lenS,
+                        maxS2,
+                        Stack2,
+                        emptyS2,
+                        isEmptyS2,
+                        push2,
+                        pop2,
+                        top2,
+                        lenS2,
+                        maxS2
+                        ) where
     
 --4.
 --Una Stack es un tipo abstracto de datos de naturaleza LIFO (last in, first out).
@@ -43,7 +51,7 @@ lenS :: Stack a -> Int
 lenS (S xs ) = length xs
 
 --2. Implementar el tipo abstracto Stack utilizando listas.-----
-     
+    
 data Stack2 a = S2 [a] Int [a]
 
 -- Inv de Rep
@@ -82,6 +90,7 @@ pop2 (S2 xs n ms) = (S2 (tail xs)(n-1)(tail ms))
 lenS2 :: Stack2 a -> Int
 lenS2 (S2 xs n ms) = n
 
+--Punto 6 ---
 -- O(1)
 maxS2 :: Ord a => Stack2 a -> a
 maxS2 (S2 xs n ms) = head ms

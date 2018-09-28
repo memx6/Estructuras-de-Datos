@@ -83,3 +83,47 @@ dequeue1 :: Queue1 a -> Queue1 a --Orden 1
 --Dada una cola la devuelve sin su primer elemento.
 dequeue1 (MxQ1 []) = error "Lista Vacia" 
 dequeue1 (MxQ1 xs) = MxQ1 (tail xs)
+
+
+
+----- Tercer Version -------
+data Queue3 a = MxQ3 [a] Int deriving (Show,Eq)
+-- Invariantes de Representacion 
+    -- el Primero en entrar es el primero en salir
+    -- el enQueue agrega el elemento al final de la lista "5" [1,2,3,4,5]
+    -- el dequeue saca el primer elemento de la lista, que seria el primero en entrar
+
+--5.Queue con longitud constante
+--Extender la interfaz de Queue con la siguiente operación: 
+
+q5 = MxQ1 [1,2,3,5]
+lenQ :: Queue3 a -> Int -- O(1)
+--Devuelve la cantidad de elementos
+lenQ (MxQ3 xs n) = n
+    
+emptyQ3 :: Queue3 a  --Orden 1
+--Crea una cola vacía.
+emptyQ3 = MxQ3 [] 0
+    
+
+isEmptyQ3 :: Queue3 a -> Bool --Orden 1
+--Dada una cola indica si la cola está vacía.
+isEmptyQ3 (MxQ3 [] n) = n == 0
+isEmptyQ3 _ = False
+         
+    
+enQueue3 :: a -> Queue3 a -> Queue3 a --Orden n
+--Dados un elemento y una cola, agrega ese elemento a la cola.
+enQueue3 e (MxQ3 xs n) = MxQ3 (xs ++ [e]) (n+1)
+         
+    
+firstQ3 :: Queue3 a -> a --Orden 1
+--Dada una cola devuelve el primer elemento de la cola.
+firstQ3 (MxQ3 [x] n) = x
+firstQ3 (MxQ3 xs n)  = head xs
+    
+    
+dequeue3 :: Queue3 a -> Queue3 a --Orden 1
+--Dada una cola la devuelve sin su primer elemento.
+dequeue3 (MxQ3 [] n) = error "Lista Vacia" 
+dequeue3 (MxQ3 xs n) = MxQ3 (tail xs) (n-1)

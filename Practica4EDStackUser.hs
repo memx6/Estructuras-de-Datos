@@ -5,19 +5,22 @@ import Practica4EDStack
 data Tree a = EmptyT
             | NodeT a (Tree a) (Tree a) deriving Show
 
-apilar :: [a] -> Stack2 a
+apilar :: Ord a => [a] -> Stack2 a
 --Dada una lista devuelve una pila sin alterar el orden de los elementos.
-apilar [x:xs] = if isEmpty xs
-                    then s
-                    else push2 x s
+apilar [] = emptyS2
+apilar xs = agregarElementos xs emptyS2
+
+agregarElementos :: Ord a => [a] -> Stack2 a -> Stack2 a
+agregarElementos [] s     = s
+agregarElementos (x:xs) s = agregarElementos xs (push2 x s)
          
 isEmpty :: [a] -> Bool
 --Dada una lista de elementos, si es vacía devuelve True, sino 
 --devuelve False.
 isEmpty [] = True
-isEmpty (x:xs) = if length xs >= 0
-                        then False
-                        else True
+isEmpty xs = (length xs) > 0
+
+
 desapilar :: Stack2 a -> [a]
 --Dada una pila devuelve una lista sin alterar el orden de los elementos.
 desapilar s = if isEmptyS2 s
@@ -25,11 +28,17 @@ desapilar s = if isEmptyS2 s
                 else top2 s : desapilar (pop2 s)         
 
 treeToStack :: Tree a -> Stack2 a
---Dado un árbol devuelve una pila con los elementos apilados inorde.
+--Dado un árbol devuelve una pila con los elementos apilados inorder.
 treeToStack EmptyT = emptyS2
-treeToStack (NodeT s s1 s2) = desapilar s
+treeToStack tree   = agregarElementos (elemInOrder tree) emptyS2
 
 
+elemInOrder :: Tree a -> [a]
+--Dado un árbol devuelve una lista que representa el resultado de recorrerlo en modo 
+--inorder. Nota: En el modo inorder primero se procesan los elementos del hijo 
+--izquierdo, luego la raiz y luego los elementos del hijo derecho.
+elemInOrder EmptyT          = []
+elemInOrder (NodeT a t1 t2) = (elemInOrder t1) ++ [a] ++ (elemInOrder t2)
 
 balanceado :: String -> Bool --(desafio)
 --Toma un string que representa una expresión aritmética, por ejemplo ”(2 + 3) ∗ 2”, 
@@ -43,9 +52,8 @@ balanceado xs = chequear xs emptyS2
 
 chequear :: String -> Stack2 Char -> Bool
 chequear [] s = isEmptyS2 s
-chequear (x:xs) s =
-	if x == '('
-	   then chequear xs (push2 '(' s)
-	   else if x == ')' && not (isEmptyS2 s)
-	   	       then chequear xs (pop2 s)
-	   	       else False
+chequear (x:xs) s = if x == '('
+    then chequear xs (push2 '(' s)
+    else if x == ')' && not (isEmptyS2 s)
+        then chequear xs (pop2 s)
+        else False
