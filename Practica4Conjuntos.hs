@@ -13,6 +13,7 @@ module Practica4Conjuntos (
 
 data Set a = S [a] deriving (Show ,Eq)
 --Invariantes de Representacion:
+---No tiene repetidos
 
 emptyS :: Set a
 --Crea un conjunto vacío.

@@ -27,7 +27,7 @@ quitar ys (x:xs) = if elem x ys
             
 losAdmin :: Organizador -> [Autor]
 losAdmin Vacio = []
-losAdmin (Agregar s xs os) = (admins xs) (losAdmin or)
+losAdmin (Agregar s xs os) = (admins xs):(losAdmin or)
 
 
 ordenados :: Organizador -> [Software]
