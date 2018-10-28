@@ -125,7 +125,7 @@ esBST (NodeT x t1 t2) = sonTodosMenores x t1 && sonTodosMayores x t2
 sonTodosMenores :: Ord a => a -> Tree a -> Bool
 sonTodosMenores _ EmptyT         = True
 sonTodosMenores a (NodeT x t1 _) = if x < a
-                                        then True && sonTodosMenores a t1
+                                        then True &&sonTodosMenores a t1
                                         else False
                                          
 

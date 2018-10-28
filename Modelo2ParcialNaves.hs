@@ -2,6 +2,7 @@
 
 tripulantes :: Nave -> Set Tripulante
 --Propósito: Denota los tripulantes de la nave
+--O (s . log s ???)
 tripulantes nave = getTripulantes (sectores nave) nave
 
 getTripulantes:: [a] -> Nave -> Set Tripulante
@@ -13,7 +14,7 @@ bajaDeTripulante :: Tripulante -> Nave -> Nave
 --Pista: Considere reconstruir la nave sin ese tripulante.
 bajaDeTripulante t nave@(MkN m h ms) = MkN(eliminarTripulante (domM m) t m nave)(actualizarH h t)(compararMaximoSector ms (sectorDe t nave)nave)
 
-eliminarTripulante :: [a] -> Tripulante -> Map k v -> Nave -> Map k v
+eliminarTripulante :: [Sector] -> Tripulante -> Map k v -> Nave -> Map k v
 eliminarTripulante (x:xs) t m nave = if (sectorDe t nave) == x
                                         then removeM m x
                                         else eliminarTripulante xs t m nave
@@ -34,8 +35,8 @@ data Nave = MkN (Map Sector (Set Tripulante)) (Heap Tripulante) (Sector, Int)
 --a) Escribir los invariantes de representación para poder crear elementos válidos del TAD.
  --Inv Rep 
  ---No hay tripulantes repetidos entre los sectores
- ---Los tripulantes se ordenan por rango de mayor a menor en la Heap
- --- No hya una nave sin sectores
+ --- el Set de tripulantes y la heap de Tripulantes tienen la misma longitud.
+ --- No hay una nave sin sectores, el map no esta vacio
 
 --b) Implementar las funciones de la interfaz, calculando eficiencia. Justifique en cada caso la eficiencia
  --obtenida.
@@ -47,6 +48,7 @@ data Nave = MkN (Map Sector (Set Tripulante)) (Heap Tripulante) (Sector, Int)
  naveVacia (xs) = MkN ( agregarSectores xs emptyM ) emptyH ((head xs),0)
       
  agregarSectores :: [Sector] -> Map k v -> Map k v
+ -- O ( log n)
  agregarSectores (x:xs) m = agregarSectores xs (assocM x emptyS m)
 
 
@@ -85,9 +87,11 @@ data Nave = MkN (Map Sector (Set Tripulante)) (Heap Tripulante) (Sector, Int)
  conRango r nave = igualRango r (tripulantesDeNave (sector nave) nave)
 
 tripulantesDeNave :: [Sector] -> Nave -> [Tripulante]
+-- O (S log S) siendo S la cantidad de setores.
 tripulantesDeNave (x:xs) n = (set2list(tripulantesDe x n)) ++ (tripulantesDeNave xs n )
 
 igualRango:: Rango -> [Tripulante] -> Set Tripulante
+--O (T log T) siendo T la cantidad de tripulantes, 
 igualRango r (t:ts) = if r == (rango t)
                             then (addS t emptyS) ++ igualRango r ts
                             else igualRango r ts
@@ -96,26 +100,30 @@ igualRango r (t:ts) = if r == (rango t)
 sectorDe :: Tripulante -> Nave -> Sector
  --Proposito: Devuelve el sector en el que se encuentra un tripulante.
  --Precondición: el tripulante pertenece a la nave.
- --Costo: O(S log S log P ) siendo S la cantidad de sectores y P la cantidad de tripulantes.
+ --Costo: O(S log S log P ) siendo S la cantidad de sectores y P la cantidad de tripulantes.??
 sectorDe t nave@(MkN m _ _) = dameSector t (sectores nave) m
 
 dameSector :: Tripulante -> [Sector] -> Map k v -> Sector
-dameSector t (x:xs) m = if t == (dameValor (lookupM x m))
-                            then x
-                            else dameSector t xs m
+-- O (S Log S + log P)
+dameSector t [] m     = error 
+dameSector t (x:xs) m = case lookup x m of
+                                Just ts -> if belongs ts
+                                                then x
+                                                else dameSector t xs m
       
  
- agregarTripulante :: Tripulante -> Sector -> Nave -> Nave
+agregarTripulante :: Tripulante -> Sector -> Nave -> Nave
  --Proposito: Agrega un tripulante a ese sector de la nave. 
  --Precondicion: El sector está en la nave y el tripulante no. 
  --Costo: No hay datos (justifique su elección).
- agregarTripulante t s nave@(MkN m h ms) = MkN((actualizarSectores (domM m) t m) (insertH t h) (compararMaximoSector ms s nave))
+agregarTripulante t s nave@(MkN m h ms) = MkN((actualizarSectores (domM m) t m) (insertH t h) (compararMaximoSector ms s nave))
 
- actualizarSectores :: [a] -> Tripulante -> Map k v -> Map k v
- actualizarGrupos (x:xs) t m = actualizarSectores xs t (unionS (assocM t emptyM) (maybeAValor(lookupM x m)))
+actualizarSectores :: [Sector] -> Tripulante -> Map k v -> Map k v
+ -- (S log S)
+actualizarGrupos (x:xs) t m = actualizarSectores xs t (unionS (assocM t emptyM) (maybeAValor(lookupM x m)))
 
- compararMaximoSector :: (Sector,Int) -> Sector -> Nave -> (Sector,Int)
- compararMaximoSector (x,y) s n = if tripulantesDe s n > y
+compararMaximoSector :: (Sector,Int) -> Sector -> Nave -> (Sector,Int)
+compararMaximoSector (x,y) s n = if sizeS(tripulantesDe s n) > y
                                         then (s,tripulantesDe s n)
                                         else (x,y)
 

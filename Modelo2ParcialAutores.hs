@@ -37,13 +37,11 @@ agregarPrograma (MkO(m1 m2)) c ps = MkO ((assocM c ps m1) (actualizarProgramas (
      
 actualizarProgramas :: [Persona] -> Checksum -> Map k v -> Map kv
 actualizarProgramas [] c     m = m
-actualizarProgramas [p:ps] c m = actualizarProgramas ps c (assocM p c )
-
+actualizarProgramas (p:ps) c m = actualizarProgramas ps c (assocM p c)
 
 todosLosProgramas :: Organizador -> [Checksum]
 --Propósito: denota una lista con todos y cada uno de los códigos identificadores de programas del 
 --organizador. Eficiencia: O(C) en peor caso, donde C es la cantidad de códigos en el organizador.
-todosLosProgramas (MkO EmptyM _) = []
 todosLosProgramas (MkO m1 m2)    = domM m1 
      
 

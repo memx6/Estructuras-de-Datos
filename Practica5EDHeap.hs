@@ -12,8 +12,7 @@ emptyH :: Heap a
 emptyH = H EmptyT
      
 isEmptyH :: Heap a -> Bool
-isEmptyH (H EmptyT) = True
-isEmptyH _        = False
+isEmptyH (H t) = isEmptyT t
      
 
 insertH :: Ord a => a -> Heap a -> Heap a
@@ -22,14 +21,10 @@ insertH e (H t) = H (insertBST e t)
 
 findMin :: Ord a => Heap a -> a -- Parcial en emptyH
 findMin (H t) = H minBST t
---findMin (NodeT x EmptyT t2) = x
---findMin (NodeT x t1 t2)     = findMin t2
 
 
 deleteMin :: Ord a => Heap a -> Heap a -- Parcial en emptyH
-deleteMin (H t) = H deleteMinBST t
---deleteMin (NodeT x EmptyT t2) = t2
---deleteMin (NodeT x t1 t2)     = Node x(deleteMin t1) t2
+deleteMin (H t) = H (deleteMinBST t)
     
 --splitMin :: Ord a => Heap a -> (a,Heap a) -- Parcial en emptyH
 --splitMin (H NodeT x EmptyT t2) = (x, t2)

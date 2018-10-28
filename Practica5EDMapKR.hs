@@ -13,8 +13,8 @@ emptyM :: Map k v
 emptyM = M []
 
 -- O(n)
-lookupM :: Eq k => k -> Map k v -> Maybe v
-lookupM k (M xs) = buscar k xs
+lookupM :: Eq k => Map k v -> k -> Maybe v
+lookupM (M xs) k  = buscar k xs
 
 buscar :: Eq k => k -> [(k, v)] -> Maybe v
 buscar k [] = Nothing
