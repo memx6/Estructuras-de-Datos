@@ -75,10 +75,7 @@ int size(Set s){
 Set unionS(Set s1, Set s2){
     NodeSetSt* e = s2->first;
     while (e != NULL){
-        if (not belongs (e->elem, s1)){
-            addS (e->elem,s1);
-            e = e->next;
-        }
+        addS (e->elem,s1);
         e = e->next;
     }
     return s1; 
