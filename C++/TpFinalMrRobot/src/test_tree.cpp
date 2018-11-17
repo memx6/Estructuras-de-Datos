@@ -40,10 +40,6 @@ int countLeaves(GenTree t) {
     return r;
 }
 
-ArrayList maxChild(ArrayList& xs){
-
-
-}
 // PROPOSITO: DEVUELVE LA ALTURA DEL ARBOL
 int heightT(GenTree t) {
     int h = 0;
@@ -56,7 +52,7 @@ int heightT(GenTree t) {
 }
 
 
-////
+// Proposita Modifica una Lista que recibe por parametro con los elementos de cada hijo del GenTree.
 List hijosEnLista (List& lis, GenTree t){
         ArrayList ts = children(t);
         for(int i = 0; i < length(ts); i++){
@@ -65,6 +61,7 @@ List hijosEnLista (List& lis, GenTree t){
         snoc(lis, value(t));
         return lis;
 }
+
 // PROPOSITO: DEVUELVE LOS ELEMENTOS DEL ARBOL EN UNA LISTA
 // PISTA: HACER UNA SUBTAREA QUE RECIBA UNA LISTA POR PARAMETRO
 // PARA PODER MODIFICARLA
@@ -75,7 +72,8 @@ List toList(GenTree t) {
 
 }
 
-List hojasEnLista (List& lis, GenTree t){
+// Proposita Dada una Lista por parametro,enlista cada elemento de cada hijo del GenTree que es Hoja (Leaf).
+void hojasEnLista (List& lis, GenTree t){
         ArrayList ts = children(t);
         for(int i = 0; i < length(ts); i++){
                 hojasEnLista(lis, getAt(ts, i));
@@ -83,16 +81,15 @@ List hojasEnLista (List& lis, GenTree t){
         if (isLeaf(t)){
             snoc(lis, value(t));
         }
-        return lis;
 }
 
 // PROPOSITO: DEVUELVE LOS ELEMENTOS QUE ESTAN EN LAS HOJAS
 List leaves(GenTree t) {
     List lis = nil();
-    return hojasEnLista(lis, t);
+    hojasEnLista(lis, t);
+    return lis;
    
 }
-
 
 // PROPOSITO: AGREGA LOS ELEMENTOS DEL ARRAYLIST AL GENTREE
 void addChildren(ArrayList ts, GenTree t) {
@@ -101,6 +98,8 @@ void addChildren(ArrayList ts, GenTree t) {
     }
 }
 
+// Propsito: Dado un GenTree, un entero y una lista por parametro, 
+// modifica la lista con los elementos que se encuentran en el nivel especificado por el entero.
 void elementosDelNivel(GenTree t, int n, List& xs){
    ArrayList ts = children(t);
    if (n == 0) {
@@ -179,7 +178,6 @@ List concatToList(ArrayList ts) {
 bool containsAll(List elems, GenTree t) {
     ListIterator it = initIt(elems);
     bool r = true;
-    ArrayList ts = children(t);
     while (not finished(it)){
         r = r && containsT(getCurrent(it),t);
         next(it);
